@@ -1,20 +1,20 @@
 {
-    "full_name": "Abhiuday Tomar",
-    "name": "Abby",
-    "current_role": "Senior Software Engineer",
-    "location": "London",
-    "email": "abhiuday467@gmail.com",
-    "linkedin": "linkedin.com/in/abhiuday",
+    "full_name": "Christopher Knowles",
+    "name": "Chris",
+    "current_role": "AI Consultant",
+    "location": "UK",
+    "email": "christopher.knowles@gmail.com",
+    "linkedin": "linkedin.com/in/chris.knowles",
     "specialties": [
       "AI",
-      "Java",
-      "Python"
+      "Coaching",
+      "Marketing"
     ],
     "years_experience": 18,
     "education": [
       {
-        "degree": "B Tech",
-        "institution": "NIT",
+        "degree": "Marketing",
+        "institution": "Oxford",
         "year": "2007"
       }
     ]

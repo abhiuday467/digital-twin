@@ -1,0 +1,113 @@
+# 📄 This is a GitHub Actions workflow file named "Deploy Digital Twin"
+name: Deploy Digital Twin
+
+# ⚙️ Define when this workflow should run
+on:
+  push:
+    branches: [main]  # 🔁 Runs automatically when code is pushed to the main branch
+  workflow_dispatch:  # 👇 Allows manual trigger from the GitHub UI
+    inputs:
+      environment:
+        description: 'Environment to deploy'  # 🌱 Optional input: dev, test, or prod
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
+
+# 🔐 Permissions granted to the GitHub token for this workflow
+permissions:
+  id-token: write        # Needed for assuming AWS IAM roles via OIDC
+  contents: read         # Allows access to repo contents
+
+# 🚀 Define the main job: "deploy"
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment || 'dev' }}  # 👷 Dynamic job name
+    runs-on: ubuntu-latest         # 🧱 Use latest Ubuntu runner
+    environment: ${{ github.event.inputs.environment || 'dev' }}  # 🌍 Set the environment
+
+    steps:
+      # 🔽 Step 1: Checkout your GitHub code to the runner
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 🔐 Step 2: Configure AWS credentials via IAM Role (OIDC)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}           # IAM Role to assume
+          role-session-name: github-actions-deploy              # Session label
+          aws-region: ${{ secrets.DEFAULT_AWS_REGION }}         # Region (e.g., eu-west-1)
+
+      # 🐍 Step 3: Set up Python (needed for the deploy script or tooling)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # ⚙️ Step 4: Install uv (a modern Python package manager)
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh       # Download and install
+          echo "$HOME/.local/bin" >> $GITHUB_PATH               # Add it to PATH
+
+      # 🌍 Step 5: Install Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false  # ✅ Use raw Terraform output (important for scripts)
+
+      # ⚙️ Step 6: Setup Node.js for frontend (e.g., React/Vite app)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'                                       # 🔁 Cache npm packages
+          cache-dependency-path: frontend/package-lock.json  # 📦 Lockfile location
+
+      # 🚀 Step 7: Run your custom deployment script
+      - name: Run Deployment Script
+        run: |
+          # Set AWS environment variables for your deploy.sh script
+          export AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
+          export DEFAULT_AWS_REGION=${{ secrets.DEFAULT_AWS_REGION }}
+
+          # Make the shell script executable and run it
+          chmod +x scripts/deploy.sh
+          ./scripts/deploy.sh ${{ github.event.inputs.environment || 'dev' }}
+        env:
+          AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}  # 👈 Passed to the script as env var
+
+      # 📦 Step 8: Get Terraform outputs (like URLs or IDs)
+      - name: Get Deployment URLs
+        id: deploy_outputs
+        working-directory: ./terraform
+        run: |
+          terraform workspace select ${{ github.event.inputs.environment || 'dev' }}
+          echo "cloudfront_url=$(terraform output -raw cloudfront_url)" >> $GITHUB_OUTPUT
+          echo "api_url=$(terraform output -raw api_gateway_url)" >> $GITHUB_OUTPUT
+          echo "frontend_bucket=$(terraform output -raw s3_frontend_bucket)" >> $GITHUB_OUTPUT
+
+      # 🧼 Step 9: Invalidate the CloudFront cache so the new frontend is served
+      - name: Invalidate CloudFront
+        run: |
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Origins.Items[?DomainName=='${{ steps.deploy_outputs.outputs.frontend_bucket }}.s3-website-${{ secrets.DEFAULT_AWS_REGION }}.amazonaws.com']].Id | [0]" \
+            --output text)
+
+          if [ "$DISTRIBUTION_ID" != "None" ] && [ -n "$DISTRIBUTION_ID" ]; then
+            aws cloudfront create-invalidation \
+              --distribution-id $DISTRIBUTION_ID \
+              --paths "/*"
+          fi
+
+      # 📣 Step 10: Output the deployment summary
+      - name: Deployment Summary
+        run: |
+          echo "✅ Deployment Complete!"
+          echo "🌐 CloudFront URL: ${{ steps.deploy_outputs.outputs.cloudfront_url }}"
+          echo "📡 API Gateway: ${{ steps.deploy_outputs.outputs.api_url }}"
+          echo "🪣 Frontend Bucket: ${{ steps.deploy_outputs.outputs.frontend_bucket }}"
