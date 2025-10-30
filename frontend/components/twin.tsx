@@ -103,31 +103,33 @@ export default function Twin() {
     }, []);
 
     return (
-        <div className="flex flex-col h-full bg-gray-50 rounded-lg shadow-lg">
+        <div className="flex flex-col h-full bg-[#d6f3ef] rounded-3xl text-[#0f3f3b] font-[var(--font-brand)]">
             {/* Header */}
-            <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white p-4 rounded-t-lg">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <Bot className="w-6 h-6" />
-                    AI Consultant
+            <div className="relative bg-[#013437] text-[#d6f3ef] p-5 rounded-t-3xl border-b-4 border-[#36e0d2]">
+                <h2 className="text-xl font-semibold flex items-center gap-2 tracking-wide uppercase">
+                    <Bot className="w-6 h-6 text-[#36e0d2]" />
+                    AI-Ready Growth Chat
                 </h2>
-                <p className="text-sm text-slate-300 mt-1">Begin your AI journey with us</p>
+                <p className="text-sm mt-1 text-[#bdf0e9]">Practical steps to make your website visible in AI-led search.</p>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-gradient-to-b from-[#d6f3ef] via-[#e6faf6] to-[#d6f3ef]">
                 {messages.length === 0 && (
-                    <div className="text-center text-gray-500 mt-8">
+                    <div className="text-center text-[#0f3f3b]/70 mt-8">
                         {hasAvatar ? (
                             <img 
                                 src="/avatar.png" 
                                 alt="Digital Twin Avatar" 
-                                className="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-gray-300"
+                                className="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-[#36e0d2]"
                             />
                         ) : (
-                            <Bot className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                            <Bot className="w-12 h-12 mx-auto mb-3 text-[#36e0d2]" />
                         )}
-                        <p>Hello! I&apos;m Christopher Knowles.</p>
-                        <p className="text-sm mt-2">You are at right place if you are looking for SEO and AI content!</p>
+                        <p className="text-lg font-semibold">Hello! I&apos;m Christopher Clowes.</p>
+                        <p className="text-sm mt-2 text-[#0f3f3b]/80">
+                            Let&apos;s get your site AI-ready—tell me about your audience and goals.
+                        </p>
                     </div>
                 )}
 
@@ -136,7 +138,7 @@ export default function Twin() {
                         key={message.id}
                         className={`flex gap-3 ${
                             message.role === 'user' ? 'justify-end' : 'justify-start'
-                        }`}
+                        } items-start`}
                     >
                         {message.role === 'assistant' && (
                             <div className="flex-shrink-0">
@@ -144,27 +146,27 @@ export default function Twin() {
                                     <img 
                                         src="/avatar.png" 
                                         alt="Digital Twin Avatar" 
-                                        className="w-8 h-8 rounded-full border border-slate-300"
+                                        className="w-8 h-8 rounded-full border-2 border-[#36e0d2]"
                                     />
                                 ) : (
-                                    <div className="w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center">
-                                        <Bot className="w-5 h-5 text-white" />
+                                    <div className="w-8 h-8 bg-[#013437] rounded-full flex items-center justify-center">
+                                        <Bot className="w-5 h-5 text-[#36e0d2]" />
                                     </div>
                                 )}
                             </div>
                         )}
 
                         <div
-                            className={`max-w-[70%] rounded-lg p-3 ${
+                            className={`max-w-[70%] rounded-xl px-4 py-3 shadow-sm ${
                                 message.role === 'user'
-                                    ? 'bg-slate-700 text-white'
-                                    : 'bg-white border border-gray-200 text-gray-800'
+                                    ? 'bg-[#013437] text-[#d6f3ef]'
+                                    : 'bg-white/90 border border-[#9be2d8] text-[#0f3f3b]'
                             }`}
                         >
                             <p className="whitespace-pre-wrap">{message.content}</p>
                             <p
-                                className={`text-xs mt-1 ${
-                                    message.role === 'user' ? 'text-slate-300' : 'text-gray-500'
+                                className={`text-xs mt-2 uppercase tracking-wide ${
+                                    message.role === 'user' ? 'text-[#7dded3]' : 'text-[#0f3f3b]/60'
                                 }`}
                             >
                                 {message.timestamp.toLocaleTimeString()}
@@ -173,7 +175,7 @@ export default function Twin() {
 
                         {message.role === 'user' && (
                             <div className="flex-shrink-0">
-                                <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                                <div className="w-8 h-8 bg-[#0bb7a4] rounded-full flex items-center justify-center border-2 border-white/70">
                                     <User className="w-5 h-5 text-white" />
                                 </div>
                             </div>
@@ -185,22 +187,22 @@ export default function Twin() {
                     <div className="flex gap-3 justify-start">
                         <div className="flex-shrink-0">
                             {hasAvatar ? (
-                                <img 
-                                    src="/avatar.png" 
-                                    alt="Digital Twin Avatar" 
-                                    className="w-8 h-8 rounded-full border border-slate-300"
+                                <img
+                                    src="/avatar.png"
+                                    alt="Digital Twin Avatar"
+                                    className="w-8 h-8 rounded-full border-2 border-[#36e0d2]"
                                 />
                             ) : (
-                                <div className="w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center">
-                                    <Bot className="w-5 h-5 text-white" />
+                                <div className="w-8 h-8 bg-[#013437] rounded-full flex items-center justify-center">
+                                    <Bot className="w-5 h-5 text-[#36e0d2]" />
                                 </div>
                             )}
                         </div>
-                        <div className="bg-white border border-gray-200 rounded-lg p-3">
+                        <div className="bg-white/90 border border-[#9be2d8] rounded-xl px-4 py-3 shadow-sm">
                             <div className="flex space-x-2">
-                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
-                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                                <div className="w-2 h-2 bg-[#0bb7a4] rounded-full animate-bounce" />
+                                <div className="w-2 h-2 bg-[#0bb7a4] rounded-full animate-bounce delay-100" />
+                                <div className="w-2 h-2 bg-[#0bb7a4] rounded-full animate-bounce delay-200" />
                             </div>
                         </div>
                     </div>
@@ -210,7 +212,7 @@ export default function Twin() {
             </div>
 
             {/* Input */}
-            <div className="border-t border-gray-200 p-4 bg-white rounded-b-lg">
+            <div className="border-t border-[#9be2d8] p-4 bg-[#e6faf6] rounded-b-3xl">
                 <div className="flex gap-2">
                     <input
                         ref={inputRef}
@@ -218,15 +220,15 @@ export default function Twin() {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleKeyPress}
-                        placeholder="Type your message..."
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent text-gray-800"
+                        placeholder="Ask Christopher how to get AI-ready..."
+                        className="flex-1 px-4 py-3 border border-[#9be2d8] rounded-xl bg-white/80 focus:outline-none focus:ring-2 focus:ring-[#0bb7a4] focus:border-transparent text-[#0f3f3b]"
                         disabled={isLoading}
                         autoFocus
                     />
                     <button
                         onClick={sendMessage}
                         disabled={!input.trim() || isLoading}
-                        className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-4 py-3 bg-[#0bb7a4] text-white rounded-xl font-semibold uppercase tracking-wide hover:bg-[#099987] focus:outline-none focus:ring-2 focus:ring-[#0bb7a4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         <Send className="w-5 h-5" />
                     </button>

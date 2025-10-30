@@ -29,7 +29,7 @@ export default function ChatWidget() {
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3">
       {isOpen && (
         <div
-          className="relative w-[360px] max-w-[90vw] h-[520px] shadow-2xl rounded-2xl border border-slate-200 bg-white/90 backdrop-blur"
+          className="relative w-[360px] max-w-[90vw] h-[520px] shadow-2xl rounded-3xl border border-[#7dded3] bg-[#d6f3ef]/95 backdrop-blur"
           role="dialog"
           aria-modal="false"
           aria-label="Christopher Clowes chat window"
@@ -37,12 +37,12 @@ export default function ChatWidget() {
           <button
             type="button"
             onClick={toggle}
-            className="absolute top-3 right-3 inline-flex items-center justify-center rounded-full bg-white/90 border border-slate-200 p-1.5 text-slate-600 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+            className="absolute top-3 right-3 inline-flex items-center justify-center rounded-full bg-white/90 border border-[#0bb7a4]/30 p-1.5 text-[#0f3f3b] hover:bg-[#bdf0e9] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0bb7a4]"
             aria-label="Close chat"
           >
             <X className="h-4 w-4" />
           </button>
-          <div className="h-full overflow-hidden rounded-2xl">
+          <div className="h-full overflow-hidden rounded-3xl border border-white/40 shadow-inner">
             <Twin />
           </div>
         </div>
@@ -51,7 +51,7 @@ export default function ChatWidget() {
       <button
         type="button"
         onClick={toggle}
-        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-slate-800 text-white shadow-lg hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#0bb7a4] text-white shadow-lg hover:bg-[#099987] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0bb7a4]"
         aria-label={isOpen ? 'Hide chat' : 'Open chat'}
       >
         <MessageCircle className="h-6 w-6" />
