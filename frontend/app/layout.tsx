@@ -21,8 +21,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Abhiuday's Digital Twin",
-  description: "AI Career twin for Abhiuday Tomar",
+  title: "Chat with Christopher",
+  description: "Turbo charge AI search with Christopher",
 };
 
 export default function RootLayout({
